@@ -94,18 +94,29 @@ func HandleMenuOption(choice int) {
 			fmt.Println("Game successfully saved to", filename)
 		}
 
-    case 2:
-        fmt.Println("Loading a save...")
-        filename := PromptUser("Enter the save file name to load:")
+    	case 2:
+		fmt.Println("Loading a save...")
+		filename := PromptUser("Enter the save file name to load:")
 		if !strings.HasSuffix(filename, ".yaml") {
 			filename += ".yaml"
 		}
-        var gameState GameState
-        if err := LoadGame(filename, &gameState); err != nil {
-            fmt.Println("Error loading game:", err)
-        } else {
-            fmt.Printf("Game successfully loaded. Players: %+v\n", gameState.Players)
-        }
+		var gameState GameState
+		if err := LoadGame(filename, &gameState); err != nil {
+			fmt.Println("Error loading game:", err)
+		} else {
+			fmt.Println("Game successfully loaded.")
+			fmt.Println("Players:")
+			for _, player := range gameState.Players {
+				fmt.Printf("Name: %s\n", player.Name)
+				fmt.Printf("Troop Count: %d\n", player.TroopCount)
+				fmt.Printf("Territories: %v\n", player.Territories)
+				fmt.Println("Cards:")
+				for _, card := range player.Cards {
+					fmt.Printf("  - Territory: %s, Type: %s\n", card.TerritoryName, card.Type)
+				}
+				fmt.Println()
+			}
+		}
 
     case 3:
         fmt.Println("Deleting a save...")
@@ -147,7 +158,7 @@ func HandleMenuOption(choice int) {
 				}
 				territory, exists := gameState.Territories[territoryName]
 				if !exists {
-					fmt.Println("Territory does not exist.")
+					fmt.Println("Territory does not exist. Remember to spell it correctly and use proper capitalization.")
 					continue
 				}
 				troops := PromptUser(fmt.Sprintf("Enter troop count for %s:", territoryName))
