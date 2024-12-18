@@ -1,5 +1,5 @@
 all:
-	go build -o bin/rgm main.go
+	go build -o bin/rgm *.go
 	./bin/rgm
 
 clean:
@@ -9,4 +9,4 @@ run:
 	./bin/rgm
 
 build:
-	go build -o bin/rgm main.go
+	go build -o bin/rgm *.go
