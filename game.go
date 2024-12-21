@@ -3,7 +3,9 @@ package main
 import (
 	// "encoding/json"
 	"fmt"
+	"math/rand"
 )
+
 // Territory represents a game territory.
 type Territory struct {
 	Name       string
@@ -153,4 +155,72 @@ func (g *GameState) getPlayer(name string) *Player {
 		}
 	}
 	return nil
+}
+
+// The attacker can role up to 3 dice, this value get's entered by user
+// generate 1-3 random numbers between 1-6 for attacker, and store them in ascending order in a slice
+// sort the rolls in descending order
+// The defender can role up to 2 dice, this value get's entered by user
+// generate 1-2 random numbers between 1-6 for defender, and store them in descending order in a slice
+// sort the rolls in descending order
+// Now we compare the 2 highest rolls of attacker and defender
+// if attacker roll is higher, defender looses 1 troop
+// if defender roll is higher or equal, attacker looses 1 troop
+func simulateBattle() {
+	fmt.Println("Simulating a battle...")
+
+	attackerDice := 0
+	for attackerDice < 1 || attackerDice > 3 {
+		fmt.Println("Enter the number of dice the attacker will roll (1-3):")
+		fmt.Scan(&attackerDice)
+		if attackerDice < 1 || attackerDice > 3 {
+			fmt.Println("Invalid number of dice. Please enter a number between 1 and 3.")
+		}
+	}
+
+	attackerRolls := make([]int, attackerDice)
+	for i := 0; i < attackerDice; i++ {
+		attackerRolls[i] = 1 + rand.Intn(6)
+	}
+
+	for i := 0; i < len(attackerRolls); i++ {
+		for j := i + 1; j < len(attackerRolls); j++ {
+			if attackerRolls[i] < attackerRolls[j] {
+				attackerRolls[i], attackerRolls[j] = attackerRolls[j], attackerRolls[i]
+			}
+		}
+	}
+
+	fmt.Println("Attacker rolls:", attackerRolls)
+
+	defenderDice := 0
+	for defenderDice < 1 || defenderDice > 2 {
+		fmt.Println("Enter the number of dice the defender will roll (1-2):")
+		fmt.Scan(&defenderDice)
+		if defenderDice < 1 || defenderDice > 2 {
+			fmt.Println("Invalid number of dice. Please enter a number between 1 and 2.")
+		}
+	}
+
+	defenderRolls := make([]int, defenderDice)
+	for i := 0; i < defenderDice; i++ {
+		defenderRolls[i] = 1 + rand.Intn(6)
+	}
+
+	for i := 0; i < len(defenderRolls); i++ {
+		for j := i + 1; j < len(defenderRolls); j++ {
+			if defenderRolls[i] < defenderRolls[j] {
+				defenderRolls[i], defenderRolls[j] = defenderRolls[j], defenderRolls[i]
+			}
+		}
+	}
+	fmt.Println("Defender rolls:", defenderRolls)
+
+	for i := 0; i < len(defenderRolls); i++ {
+		if attackerRolls[i] > defenderRolls[i] {
+			fmt.Println("Defender loses 1 troop.")
+		} else {
+			fmt.Println("Attacker loses 1 troop.")
+		}
+	}
 }
