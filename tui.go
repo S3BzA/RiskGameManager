@@ -16,17 +16,18 @@ func DisplayMenu() int {
     fmt.Println("2. Load a Save")
     fmt.Println("3. Delete a Save")
     fmt.Println("4. Update a Save")
-    fmt.Println("5. Simulate battle")
-    fmt.Println("Enter your choice (1-5):")
+    fmt.Println("5. Simulate single battle")
+    fmt.Println("6. Simulate battles")
+    fmt.Println("Enter your choice (1-6):")
 
     var choice int
     _, err := fmt.Scan(&choice)
     if err != nil {
-        fmt.Println("Invalid input. Please enter a number between 1 and 5.")
+        fmt.Println("Invalid input. Please enter a number between 1 and 6.")
         return DisplayMenu() // Retry on invalid input.
     }
 
-    if choice < 1 || choice > 5 {
+    if choice < 1 || choice > 6 {
         fmt.Println("Invalid choice. Please select a valid option.")
         return DisplayMenu() // Retry on out-of-range input.
     }
@@ -214,6 +215,8 @@ func HandleMenuOption(choice int) {
 		}
 	case 5:
 		simulateBattle()
+	case 6:
+		Simulation()
     default:
         fmt.Println("Unknown option. This should never happen.")
     }
